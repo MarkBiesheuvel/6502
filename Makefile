@@ -1,9 +1,22 @@
-SYSTEM=linux
-VASM=vasm/$(SYSTEM)/vasm6502_oldstyle
-OPTIONS=-Fbin -dotdir
+ifeq ($(OS), Windows_NT)
+	SYSTEM := win
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S), Linux)
+		SYSTEM := linux
+	endif
+	ifeq ($(UNAME_S), Darwin)
+		SYSTEM := mac
+	endif
+endif
 
-.PHONY : help
+VASM_DIR := $(PWD)
+VASM_EXEC := $(VASM_DIR)/vasm/$(SYSTEM)/vasm6502_oldstyle
+VASM_OPTIONS := -Fbin -dotdir
+HEXDUMP_OPTIONS := -C
 .DEFAULT_GOAL := help
+
+.PHONY: help
 
 help :
 	@echo ''
@@ -14,8 +27,8 @@ help :
 %.bin : %.s
 	@echo ''
 	@echo '== Assembling =='
-	@$(VASM) $< $(OPTIONS) -o $@
+	@$(VASM_EXEC) $< $(VASM_OPTIONS) -o $@
 
 	@echo ''
 	@echo '== Hexdump =='
-	@hexdump -C $@
+	@hexdump $(HEXDUMP_OPTIONS) $@
