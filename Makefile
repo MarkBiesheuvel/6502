@@ -24,7 +24,7 @@ help :
 	@echo '  make help     show this message'
 	@echo '  make *.bin    assemle *.s into *.bin'
 
-%.bin : %.s
+%.bin : %.asm
 	@echo ''
 	@echo '== Assembling =='
 	@$(VASM_EXEC) $< $(VASM_OPTIONS) -o $@
