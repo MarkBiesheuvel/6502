@@ -51,8 +51,11 @@ reset:
   clc
 
 loop:
-  ; Rotate A-register right and send it to to register B of the Interface Adapter
+  ; Rotate accumulator right until carry is not set
   ror
+  bcs loop
+
+  ; Send accumulator to to register B of the Interface Adapter
   sta IORB
 
   jmp loop
